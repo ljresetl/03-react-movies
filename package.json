@@ -12,10 +12,13 @@
   "dependencies": {
     "20": "^3.1.9",
     "axios": "^1.12.2",
+    "lodash.template": "^4.5.0",
     "modern-normalize": "^3.0.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "react-hot-toast": "^2.6.0"
+    "react-hot-toast": "^2.6.0",
+    "rimraf": "^6.0.1",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
