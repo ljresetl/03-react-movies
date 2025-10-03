@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import styles from './SearchBar.module.css'
 import toast from 'react-hot-toast'
 
@@ -7,22 +7,7 @@ interface SearchBarProps {
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSubmit }) => {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const form = e.currentTarget
-    const input = form.elements.namedItem('query') as HTMLInputElement | null
-    const value = input?.value.trim() ?? ''
-
-    if (!value) {
-      // точний текст за умовою
-      toast.error('Please enter your search query.')
-      return
-    }
-
-    onSubmit(value)
-    // очищаємо інпут після сабміту
-    form.reset()
-  }
+  const formRef = useRef<HTMLFormElement>(null)
 
   return (
     <header className={styles.header}>
@@ -35,7 +20,23 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSubmit }) => {
         >
           Powered by TMDB
         </a>
-        <form className={styles.form} onSubmit={handleSubmit}>
+        <form
+          ref={formRef}
+          className={styles.form}
+          action={async (formData: FormData) => {
+            const query = (formData.get('query') as string | null)?.trim() ?? ''
+
+            if (!query) {
+              toast.error('Please enter your search query.')
+              return
+            }
+
+            onSubmit(query)
+
+            // Очищення інпуту після сабміту
+            formRef.current?.reset()
+          }}
+        >
           <input
             className={styles.input}
             type="text"
