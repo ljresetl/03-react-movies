@@ -1,5 +1,4 @@
 import axios from 'axios'
-import type { AxiosResponse } from 'axios'
 import type { Movie } from '../types/movie'
 
 interface TMDBSearchResponse {
@@ -12,7 +11,6 @@ interface TMDBSearchResponse {
 const token = import.meta.env.VITE_TMDB_TOKEN as string | undefined
 
 if (!token) {
-  // Якщо токен не заданий — кидаємо помилку одразу (щоб не відправляти запити без авторизації)
   throw new Error('VITE_TMDB_TOKEN is not defined. Please set it in environment variables.')
 }
 
@@ -31,6 +29,6 @@ export async function fetchMovies(query: string, page = 1): Promise<Movie[]> {
     page,
   }
 
-  const response: AxiosResponse<TMDBSearchResponse> = await api.get('/search/movie', { params })
+  const response = await api.get<TMDBSearchResponse>('/search/movie', { params })
   return response.data.results
 }
